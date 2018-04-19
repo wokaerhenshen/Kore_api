@@ -17,18 +17,60 @@ namespace core_backend.Repositories
             _context = context;
         }
 
-        public void CreateTimeslip (string StartTime, string EndTime)
+        public Timeslip CreateTimeslip (string StartTime, string EndTime, int workBreakDownId)
         {
-
+            // application user needs to be here
             Timeslip timeslip = new Timeslip()
             {
                 StartTime = DateTime.Parse(StartTime),
                 EndTime = DateTime.Parse(EndTime),
                 UserId = "1",
-                WorkBreakdownItemId = 1
+                WorkBreakdownItemId = workBreakDownId
             };
             _context.Timeslips.Add(timeslip);
             _context.SaveChanges();
+
+            return timeslip;
         }
+
+        public List<Timeslip> GetAllTimeslips()
+        {
+            return _context.Timeslips.ToList();
+        }
+
+        public Timeslip GetOneTimeslip(int id)
+        {
+            return _context.Timeslips.Where(t => t.TimeslipId == id).FirstOrDefault();
+        }
+
+        public Timeslip EditTimeslip(int id, string StartTime, string EndTime)
+        {
+            var timeslip = GetOneTimeslip(id);
+            if (timeslip == null)
+            {
+                return timeslip;
+            }
+            else
+            {
+                timeslip.StartTime = DateTime.Parse(StartTime);
+                timeslip.EndTime = DateTime.Parse(EndTime);
+
+                _context.SaveChanges();
+            }
+            return timeslip;
+        }
+
+        public Timeslip DeleteOneTimeslip(int id)
+        {
+            var timeslip = GetOneTimeslip(id);
+            if (timeslip == null)
+            {
+                return timeslip;
+            }
+            _context.Timeslips.Remove(timeslip);
+            _context.SaveChanges();
+            return timeslip;
+        }
+
     }
 }

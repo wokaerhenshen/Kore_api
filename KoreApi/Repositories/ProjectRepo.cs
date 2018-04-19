@@ -46,8 +46,6 @@ namespace core_backend.Repositories
             project.StartDate = Convert.ToDateTime(StartDate);
             project.EndDate = Convert.ToDateTime(EndDate);
             _context.SaveChanges();
-
-
         }
 
         public void DeleteOneProject(int id)

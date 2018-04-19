@@ -148,12 +148,51 @@ namespace core_backend.Controllers
             }
             return new OkObjectResult(wbi);
         }
+
         [HttpPost]
-        [Route("CreateTimeSlip")]
-        public bool CreateTimeSlip(string StartTime, string EndTime)
+        [Route("CreateTimeslip")]
+        public IActionResult CreateTimeslip(string StartTime, string EndTime, int workBreakDownId)
         {
-            timeSlipRepo.CreateTimeslip(StartTime, EndTime);
-            return true;
+
+            return new ObjectResult(timeSlipRepo.CreateTimeslip(StartTime, EndTime, workBreakDownId));
+        }
+
+        [HttpGet]
+        [Route("GetAllTimeslips")]
+        public IActionResult GetAllTimeslips()
+        {
+            return new ObjectResult(timeSlipRepo.GetAllTimeslips());
+        }
+
+        [HttpGet]
+        [Route("GetOneTimeslip/{id}")]
+        public IActionResult GetOneTimeslip(int id)
+        {
+            return new ObjectResult(timeSlipRepo.GetOneTimeslip(id));
+        }
+
+        [HttpPut]
+        [Route("EditTimeslip")]
+        public IActionResult EditTimeslip(int id, string StartTime, string EndTime)
+        {
+            var timeslip = timeSlipRepo.EditTimeslip(id, StartTime, EndTime);
+            if (timeslip == null)
+            {
+                return new NotFoundObjectResult(timeslip);
+            }
+            return new ObjectResult(timeslip);
+        }
+
+        [HttpDelete]
+        [Route("DeleteOneTimeslip")]
+        public IActionResult DeleteOneTimeslip(int id)
+        {
+            var timeslip = timeSlipRepo.DeleteOneTimeslip(id);
+            if (timeslip == null)
+            {
+                return new NotFoundObjectResult(timeslip);
+            }
+            return new ObjectResult(timeslip);
         }
     }
 }
