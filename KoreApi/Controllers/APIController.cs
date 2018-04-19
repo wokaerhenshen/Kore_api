@@ -17,7 +17,7 @@ namespace core_backend.Controllers
         ProjectRepo projectRepo;
         ClientRepo clientRepo;
         // WBIRepo wBIRepo;
-        // TimeSlipRepo timeSlipRepo;
+        TimeslipRepo timeSlipRepo;
 
         public APIController(ApplicationDbContext context)
         {
@@ -84,11 +84,10 @@ namespace core_backend.Controllers
 
         [HttpPost]
         [Route("CreateTimeSlip")]
-        public bool CreateTimeSlip()
+        public bool CreateTimeSlip(string StartTime, string EndTime)
         {
+            timeSlipRepo.CreateTimeslip(StartTime, EndTime);
             return true;
         }
-
-
     }
 }
