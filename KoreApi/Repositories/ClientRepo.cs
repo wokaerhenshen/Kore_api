@@ -40,6 +40,22 @@ namespace core_backend.Repositories
             return _context.Clients.Where(i => i.ClientId == id).FirstOrDefault();
         }
 
+        public void UpdateOneClient(int id, string Name, int DeletionStateCode, int StateCode)
+        {
+            Client client = _context.Clients.Where(i => i.ClientId == id).FirstOrDefault();
+            client.Name = Name;
+            client.DeletionStateCode = DeletionStateCode;
+            client.StateCode = StateCode;
+            _context.SaveChanges();
+        }
+
+        public void DeleteOneClient(int id)
+        {
+            Client client = _context.Clients.Where(i => i.ClientId == id).FirstOrDefault();
+            _context.Clients.Remove(client);
+            _context.SaveChanges();
+        }
+
 
     }
 }

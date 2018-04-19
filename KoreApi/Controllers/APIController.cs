@@ -48,10 +48,22 @@ namespace core_backend.Controllers
         }
 
         //update client
-
+        [HttpPut]
+        [Route("UpdateOneClient")]
+        public bool UpdateOneClient(int id,string Name, int DeletionStateCode, int StateCode)
+        {
+            clientRepo.UpdateOneClient(id,Name, DeletionStateCode, StateCode);
+            return true;
+        }
 
         //delete client
-
+        [HttpDelete]
+        [Route("DeleteOneClient")]
+        public bool DeleteOneClient(int id)
+        {
+            clientRepo.DeleteOneClient(id);
+            return true;
+        }
 
         [HttpPost]
         [Route("CreateProject")]
