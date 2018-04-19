@@ -1,6 +1,6 @@
 using System;
 
-namespace KoreApi.Models
+namespace core_backend.Models
 {
     public class ErrorViewModel
     {

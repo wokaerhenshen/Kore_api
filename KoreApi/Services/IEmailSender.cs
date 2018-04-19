@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KoreApi.Services
+namespace core_backend.Services
 {
     public interface IEmailSender
     {

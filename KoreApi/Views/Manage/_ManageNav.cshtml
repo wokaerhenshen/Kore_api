@@ -1,4 +1,4 @@
-﻿@using KoreApi.Views.Manage
+﻿@using core_backend.Views.Manage
 @inject SignInManager<ApplicationUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

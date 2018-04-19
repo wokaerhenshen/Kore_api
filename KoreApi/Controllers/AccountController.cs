@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using KoreApi.Models;
-using KoreApi.Models.AccountViewModels;
-using KoreApi.Services;
+using core_backend.Models;
+using core_backend.Models.AccountViewModels;
+using core_backend.Services;
 
-namespace KoreApi.Controllers
+namespace core_backend.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]

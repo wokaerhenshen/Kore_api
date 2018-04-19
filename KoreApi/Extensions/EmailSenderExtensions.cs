@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using KoreApi.Services;
+using core_backend.Services;
 
-namespace KoreApi.Services
+namespace core_backend.Services
 {
     public static class EmailSenderExtensions
     {

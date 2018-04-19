@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KoreApi.Models.ManageViewModels
+namespace core_backend.Models.ManageViewModels
 {
     public class ChangePasswordViewModel
     {

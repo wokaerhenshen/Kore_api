@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KoreApi.Models.AccountViewModels
+namespace core_backend.Models.AccountViewModels
 {
     public class LoginWith2faViewModel
     {
