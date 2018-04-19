@@ -41,7 +41,7 @@ namespace core_backend.Repositories
             return _context.WorkBreakdownItems.Where(i => i.WorkBreakdownItemId == id)
                 .FirstOrDefault();
         }
-        public WorkBreakdownItem EditWBI(int id, string name, string description, int estimatedHours, int actualHours, int projectId)
+        public WorkBreakdownItem EditWBI(int id, string name, string description, int estimatedHours, int actualHours)
         {
             var wbi = GetOneWBI(id);
             if (wbi == null)
@@ -54,7 +54,7 @@ namespace core_backend.Repositories
                 wbi.Description = description;
                 wbi.EstimatedHours = estimatedHours;
                 wbi.ActualHours = actualHours;
-                wbi.ProjectId = projectId;
+               
                 _context.SaveChanges();
             }
             return wbi;
