@@ -16,19 +16,45 @@ namespace core_backend.Repositories
             _context = context;
         }
 
-        public void CreateProject(string Name, string StartDate, string EndDate)
+        public void CreateProject(int ClientId,string Name, string StartDate, string EndDate)
         {
             Project project = new Project()
             {
-                ClientId = 1,
+                ClientId = ClientId,
                 Name = Name,
                 StartDate = Convert.ToDateTime(StartDate),
                 EndDate = Convert.ToDateTime(EndDate)
             };
             _context.Projects.Add(project);
             _context.SaveChanges();
+        }
+
+        public List<Project> GetAllProjects()
+        {
+            return _context.Projects.ToList();
+        }
+
+        public Project GetOneProject(int id)
+        {
+            return _context.Projects.Where(i => i.ProjectId == id).FirstOrDefault();
+        }
+
+        public void UpdateOneProject(int id, string Name, string StartDate, string EndDate)
+        {
+            Project project = _context.Projects.Where(i => i.ProjectId == id).FirstOrDefault();
+            project.Name = Name;
+            project.StartDate = Convert.ToDateTime(StartDate);
+            project.EndDate = Convert.ToDateTime(EndDate);
+            _context.SaveChanges();
 
 
+        }
+
+        public void DeleteOneProject(int id)
+        {
+            Project project = _context.Projects.Where(i => i.ProjectId == id).FirstOrDefault();
+            _context.Projects.Remove(project);
+            _context.SaveChanges();
         }
     }
 }

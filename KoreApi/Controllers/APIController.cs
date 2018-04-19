@@ -67,11 +67,43 @@ namespace core_backend.Controllers
 
         [HttpPost]
         [Route("CreateProject")]
-        public bool CreateProject(string Name, string StartDate, string EndDate)
+        public bool CreateProject(int ClientId, string Name, string StartDate, string EndDate)
         {
-            projectRepo.CreateProject(Name, StartDate, EndDate);
+            projectRepo.CreateProject(ClientId, Name, StartDate, EndDate);
             return true;
         }
+
+        [HttpGet]
+        [Route("GetAllProject")]
+        public IActionResult GetAllProject()
+        {
+            return new OkObjectResult(projectRepo.GetAllProjects());
+        }
+
+        [HttpGet]
+        [Route("GetOneProject/{id}")]
+        public IActionResult GetOneProject(int id)
+        {
+            return new OkObjectResult(projectRepo.GetOneProject(id));
+        }
+
+        [HttpPut]
+        [Route("UpdateOneProject")]
+        public bool UpdateOneProject(int id, string Name, string StartDate, string EndDate)
+        {
+            projectRepo.UpdateOneProject(id, Name, StartDate, EndDate);
+            return true;
+        }
+
+        [HttpDelete]
+        [Route("DeleteOneProject")]
+        public bool DeleteOneProject(int id)
+        {
+            projectRepo.DeleteOneProject(id);
+            return true;
+        }
+
+
 
         [HttpPost]
         [Route("CreateWBI")]
