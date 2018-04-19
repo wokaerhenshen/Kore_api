@@ -10,19 +10,21 @@ using Microsoft.AspNetCore.Mvc;
 namespace core_backend.Controllers
 {
     [Produces("application/json")]
-    [Route("api/API")]
+    [Route("api")]
     public class APIController : Controller
     {
 
         ProjectRepo projectRepo;
         ClientRepo clientRepo;
-        // WBIRepo wBIRepo;
         TimeslipRepo timeSlipRepo;
+        WBIRepo wbiRepo;
 
         public APIController(ApplicationDbContext context)
         {
+           
             projectRepo = new ProjectRepo(context);
             clientRepo = new ClientRepo(context);
+            wbiRepo = new WBIRepo(context);
         }
 
         [HttpPost]
@@ -67,21 +69,85 @@ namespace core_backend.Controllers
 
         [HttpPost]
         [Route("CreateProject")]
-        public bool CreateProject(string Name, string StartDate, string EndDate)
+        public bool CreateProject(int ClientId, string Name, string StartDate, string EndDate)
         {
-            projectRepo.CreateProject(Name, StartDate, EndDate);
+            projectRepo.CreateProject(ClientId, Name, StartDate, EndDate);
+            return true;
+        }
+
+        [HttpGet]
+        [Route("GetAllProject")]
+        public IActionResult GetAllProject()
+        {
+            return new OkObjectResult(projectRepo.GetAllProjects());
+        }
+
+        [HttpGet]
+        [Route("GetOneProject/{id}")]
+        public IActionResult GetOneProject(int id)
+        {
+            return new OkObjectResult(projectRepo.GetOneProject(id));
+        }
+
+        [HttpPut]
+        [Route("UpdateOneProject")]
+        public bool UpdateOneProject(int id, string Name, string StartDate, string EndDate)
+        {
+            projectRepo.UpdateOneProject(id, Name, StartDate, EndDate);
+            return true;
+        }
+
+        [HttpDelete]
+        [Route("DeleteOneProject")]
+        public bool DeleteOneProject(int id)
+        {
+            projectRepo.DeleteOneProject(id);
             return true;
         }
 
         [HttpPost]
         [Route("CreateWBI")]
-        public bool CreateWBI()
+        public IActionResult CreateWBI(string name, string description, int estimatedHours, int actualHours, int projectId)
         {
-            return true;
+            
+            return new OkObjectResult(wbiRepo.CreateWBI(name, description, estimatedHours, actualHours, projectId));
+        }
+        [HttpGet]
+        [Route("GetAllWBIs")]
+        public IActionResult GetAllWBIs()
+        {
+            return new OkObjectResult(wbiRepo.GetAllWBIs());
         }
 
+        [HttpGet]
+        [Route("GetOneWBI/{id}")]
+        public IActionResult GetOneWBI(int id)
+        {
+            return new OkObjectResult(wbiRepo.GetOneWBI(id));
+        }
 
-
+        [HttpPut]
+        [Route("EditWBI")]
+        public IActionResult EditWBI(int id, string name, string description, int estimatedHours, int actualHours, int projectId)
+        {
+            var wbi = wbiRepo.EditWBI(id, name, description, estimatedHours, actualHours, projectId);
+            if (wbi == null)
+            {
+                return new NotFoundObjectResult(wbi);
+            }
+            return new OkObjectResult(wbi);
+        }
+        [HttpDelete]
+        [Route("DeleteOneWBI")]
+        public IActionResult RemoveWBI(int id)
+        {
+            var wbi = wbiRepo.DeleteOneWBI(id);
+            if (wbi == null)
+            {
+                return new NotFoundObjectResult(wbi);
+            }
+            return new OkObjectResult(wbi);
+        }
         [HttpPost]
         [Route("CreateTimeSlip")]
         public bool CreateTimeSlip(string StartTime, string EndTime)
