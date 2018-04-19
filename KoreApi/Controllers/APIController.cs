@@ -25,6 +25,7 @@ namespace core_backend.Controllers
             projectRepo = new ProjectRepo(context);
             clientRepo = new ClientRepo(context);
             wbiRepo = new WBIRepo(context);
+            timeSlipRepo = new TimeslipRepo(context);
         }
 
         [HttpPost]
