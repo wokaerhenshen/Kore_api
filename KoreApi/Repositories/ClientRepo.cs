@@ -35,6 +35,11 @@ namespace core_backend.Repositories
             return _context.Clients.ToList();
         }
 
+        public Client GetOneClient(int id)
+        {
+            return _context.Clients.Where(i => i.ClientId == id).FirstOrDefault();
+        }
+
 
     }
 }

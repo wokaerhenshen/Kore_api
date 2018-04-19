@@ -40,10 +40,22 @@ namespace core_backend.Controllers
             return new OkObjectResult(clientRepo.GetAllClients());
         }
 
+        [HttpGet]
+        [Route("GetOneClient/{id}")]
+        public IActionResult GetOneClient(int id)
+        {
+            return new OkObjectResult(clientRepo.GetOneClient(id));
+        }
+
+        //update client
+
+
+        //delete client
+
 
         [HttpPost]
         [Route("CreateProject")]
-        public bool CreateProject(string Name, DateTime StartDate, DateTime EndDate)
+        public bool CreateProject(string Name, string StartDate, string EndDate)
         {
             projectRepo.CreateProject(Name, StartDate, EndDate);
             return true;

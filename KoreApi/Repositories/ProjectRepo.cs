@@ -16,13 +16,14 @@ namespace core_backend.Repositories
             _context = context;
         }
 
-        public void CreateProject(string Name, DateTime StartDate, DateTime EndDate)
+        public void CreateProject(string Name, string StartDate, string EndDate)
         {
             Project project = new Project()
             {
+                ClientId = 1,
                 Name = Name,
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now
+                StartDate = Convert.ToDateTime(StartDate),
+                EndDate = Convert.ToDateTime(EndDate)
             };
             _context.Projects.Add(project);
             _context.SaveChanges();
