@@ -33,7 +33,7 @@ namespace core_backend.Migrations
 
                     b.HasKey("ClientId");
 
-                    b.ToTable("Client");
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("core_backend.Data.Project", b =>
@@ -41,7 +41,7 @@ namespace core_backend.Migrations
                     b.Property<int>("ProjectId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ClientId");
+                    b.Property<int>("ClientId");
 
                     b.Property<DateTime>("EndDate");
 
@@ -276,7 +276,8 @@ namespace core_backend.Migrations
                 {
                     b.HasOne("core_backend.Data.Client", "Client")
                         .WithMany("Projects")
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("core_backend.Data.Timeslip", b =>

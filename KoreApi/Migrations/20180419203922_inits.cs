@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace core_backend.Migrations
 {
-    public partial class init : Migration
+    public partial class inits : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,7 +49,7 @@ namespace core_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Client",
+                name: "Clients",
                 columns: table => new
                 {
                     ClientId = table.Column<int>(nullable: false)
@@ -60,7 +60,7 @@ namespace core_backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Client", x => x.ClientId);
+                    table.PrimaryKey("PK_Clients", x => x.ClientId);
                 });
 
             migrationBuilder.CreateTable(
@@ -195,7 +195,7 @@ namespace core_backend.Migrations
                 {
                     ProjectId = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ClientId = table.Column<int>(nullable: true),
+                    ClientId = table.Column<int>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     StartDate = table.Column<DateTime>(nullable: false)
@@ -204,9 +204,9 @@ namespace core_backend.Migrations
                 {
                     table.PrimaryKey("PK_Projects", x => x.ProjectId);
                     table.ForeignKey(
-                        name: "FK_Projects_Client_ClientId",
+                        name: "FK_Projects_Clients_ClientId",
                         column: x => x.ClientId,
-                        principalTable: "Client",
+                        principalTable: "Clients",
                         principalColumn: "ClientId",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -356,7 +356,7 @@ namespace core_backend.Migrations
                 name: "Projects");
 
             migrationBuilder.DropTable(
-                name: "Client");
+                name: "Clients");
         }
     }
 }

@@ -18,11 +18,16 @@ namespace core_backend.Repositories
 
         public void CreateProject(string Name, DateTime StartDate, DateTime EndDate)
         {
-            //Project project = new Project()
-            //{
+            Project project = new Project()
+            {
+                Name = Name,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now
+            };
+            _context.Projects.Add(project);
+            _context.SaveChanges();
 
-            //}
-            
+
         }
     }
 }

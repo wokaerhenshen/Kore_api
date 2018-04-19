@@ -15,13 +15,31 @@ namespace core_backend.Controllers
     {
 
         ProjectRepo projectRepo;
-       // WBIRepo wBIRepo;
-       // TimeSlipRepo timeSlipRepo;
+        ClientRepo clientRepo;
+        // WBIRepo wBIRepo;
+        // TimeSlipRepo timeSlipRepo;
 
         public APIController(ApplicationDbContext context)
         {
-            
+            projectRepo = new ProjectRepo(context);
+            clientRepo = new ClientRepo(context);
         }
+
+        [HttpPost]
+        [Route("CreateClient")]
+        public bool CreateClient(string Name, int DeletionStateCode,int StateCode)
+        {
+            clientRepo.CreateClient(Name, DeletionStateCode, StateCode);
+            return true;
+        }
+
+        [HttpGet]
+        [Route("GetAllClients")]
+        public IActionResult GetAllClients()
+        {
+            return new OkObjectResult(clientRepo.GetAllClients());
+        }
+
 
         [HttpPost]
         [Route("CreateProject")]

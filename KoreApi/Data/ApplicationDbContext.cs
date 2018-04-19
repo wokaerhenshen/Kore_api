@@ -56,6 +56,7 @@ namespace core_backend.Data
     {
         [Key]
         public int ProjectId { get; set; }
+        public int ClientId { get; set; }
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -90,10 +91,17 @@ namespace core_backend.Data
         public DbSet<Timeslip> Timeslips { get; set; }
         public DbSet<WorkBreakdownItem> WorkBreakdownItems { get; set; }
         public DbSet<UserDetail> UserDetail { get; set; }
+        public DbSet<Client> Clients { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
+            builder.Entity<Project>()
+                .HasOne(c=> c.Client)
+                .WithMany(p=> p.Projects)
+                .HasForeignKey(fk=> new { fk.ClientId})
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Timeslip>()
                .HasOne(t => t.UserDetail)
