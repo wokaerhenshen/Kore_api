@@ -9,5 +9,7 @@ namespace core_backend.Utility
     {
         public const string AdminUser = "Admin";
         public const string CustomerUser = "Customer";
+
+        public const string Jan = "Jan";
     }
 }
