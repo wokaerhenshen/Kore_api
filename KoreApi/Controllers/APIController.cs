@@ -130,9 +130,9 @@ namespace core_backend.Controllers
 
         [HttpPut]
         [Route("EditWBI")]
-        public IActionResult EditWBI(int id, string name, string description, int estimatedHours, int actualHours, int projectId)
+        public IActionResult EditWBI(int id, string name, string description, int estimatedHours, int actualHours)
         {
-            var wbi = wbiRepo.EditWBI(id, name, description, estimatedHours, actualHours, projectId);
+            var wbi = wbiRepo.EditWBI(id, name, description, estimatedHours, actualHours);
             if (wbi == null)
             {
                 return new NotFoundObjectResult(wbi);
