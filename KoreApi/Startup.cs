@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using core_backend.Data;
 using core_backend.Models;
 using core_backend.Services;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 //test
 namespace core_backend
 {
@@ -36,6 +39,33 @@ namespace core_backend
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
+            services.AddCors(options => {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                    });
+            });
+
+            // Add this before services.AddMvc()
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services.AddAuthentication()
+            .AddJwtBearer(cfg => {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = Configuration["TokenInformation:Issuer"],
+                    ValidAudience = Configuration["TokenInformation:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenInformation:Key"])),
+                    ClockSkew = TimeSpan.Zero // remove delay of token when expire
+    };
+            });
+
             services.AddMvc();
         }
 
@@ -55,7 +85,7 @@ namespace core_backend
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
+            app.UseCors("AllowAll");
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

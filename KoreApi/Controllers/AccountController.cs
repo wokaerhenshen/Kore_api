@@ -13,6 +13,10 @@ using Microsoft.Extensions.Options;
 using core_backend.Models;
 using core_backend.Models.AccountViewModels;
 using core_backend.Services;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace core_backend.Controllers
 {
@@ -25,16 +29,20 @@ namespace core_backend.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
+        private readonly IConfiguration _configuration;
+
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _configuration = configuration;
         }
 
         [TempData]
@@ -54,7 +62,7 @@ namespace core_backend.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<object> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -65,7 +73,11 @@ namespace core_backend.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    var appUser = _userManager.Users.SingleOrDefault(r =>
+                                        r.Email == model.Email);
+                    return await GenerateJwtToken(model.Email, appUser);
+
+                    
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -224,11 +236,13 @@ namespace core_backend.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    //create UserDetail with the same ID
+
                     _logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                    //await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
@@ -460,5 +474,33 @@ namespace core_backend.Controllers
         }
 
         #endregion
+
+        // Generates a token using settings stored in the appsettings.json file.
+        private async Task<object> GenerateJwtToken(string email,
+                                                    IdentityUser user)
+        {
+            var claims = new List<Claim> {
+            new Claim(JwtRegisteredClaimNames.Sub, email),
+            new Claim(JwtRegisteredClaimNames.Jti,
+                        Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id)
+        };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                            _configuration["TokenInformation:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var expires = DateTime.Now.AddDays(Convert.ToDouble(1));
+            var token = new JwtSecurityToken(
+                _configuration["TokenInformation:Issuer"],
+                _configuration["TokenInformation:Audience"],
+                claims,
+                expires: expires,
+                signingCredentials: creds
+            );
+            var formattedToken = new JwtSecurityTokenHandler().WriteToken(token);
+            return Ok(new { token = formattedToken });
+        }
+
     }
 }
