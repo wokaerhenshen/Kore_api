@@ -45,16 +45,16 @@ namespace core_backend.Data
             var projects = new Project[]
             {
                 new Project { Name = "Project Calgary",
-                    StartDate = Convert.ToDateTime("01/20/2018"),
-                    EndDate = Convert.ToDateTime("01/30/2018"), 
+                              StartDate = new DateTime(2018, 01, 20, 01, 01, 01),
+                              EndDate =  new DateTime(2018, 01, 30, 02, 02, 02),
                               ClientId = clients.Single(c => c.Name == "Calgary Flames").ClientId },
                 new Project { Name = "Project Vancouver",
-                     StartDate = Convert.ToDateTime("02/20/2018"),
-                    EndDate = Convert.ToDateTime("02/30/2018"),
+                              StartDate = new DateTime(2018, 02, 20, 01, 01, 01),
+                              EndDate = new DateTime(2018, 02, 27, 02, 02, 02),
                               ClientId = clients.Single(c => c.Name == "Vancouver Canucks").ClientId },
-                new Project { Name = "Project Winnnipeg",
-                    StartDate = Convert.ToDateTime("03/20/2018"),
-                    EndDate = Convert.ToDateTime("03/30/2018"),
+                new Project { Name = "Project Winnipeg",
+                              StartDate = new DateTime(2018, 03, 20, 01, 01, 01),
+                              EndDate = new DateTime(2018, 03, 30, 02, 02, 02),
                               ClientId = clients.Single(c => c.Name == "Winnipeg Jets").ClientId }
             };
             foreach (Project p in projects)
@@ -140,7 +140,9 @@ namespace core_backend.Data
                 StartTime = DateTime.ParseExact("2018-04-20 08:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
                 EndTime = DateTime.ParseExact("2018-04-20 11:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
                 UserId = user.Id,
-                WorkBreakdownItemId = workBreakdownItems.Single(w => w.Description == "Calgary's Finance").WorkBreakdownItemId
+                WorkBreakdownItemId = workBreakdownItems.Single(w => w.Description == "Calgary's Finance").WorkBreakdownItemId,
+                Remarks = "TestRemark",
+                Tag = "TestTag"
             };
             _context.Timeslips.Add(timeslipOne);
             _context.SaveChanges();
