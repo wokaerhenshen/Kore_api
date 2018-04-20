@@ -44,6 +44,7 @@ namespace core_backend.Repositories
             Project project = _context.Projects.Where(i => i.ProjectId == id).FirstOrDefault();
             project.Name = Name;
             project.StartDate = Convert.ToDateTime(StartDate);
+            //05/05/2005
             project.EndDate = Convert.ToDateTime(EndDate);
             _context.SaveChanges();
         }

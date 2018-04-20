@@ -1,4 +1,7 @@
-﻿using System;
+﻿using core_backend.Models;
+using core_backend.Utility;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,10 +12,12 @@ namespace core_backend.Data
     public class Seeder
     {
         private ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public Seeder(ApplicationDbContext context)
+        public Seeder(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public void SeedData()
@@ -39,11 +44,17 @@ namespace core_backend.Data
             }
             var projects = new Project[]
             {
-                new Project { Name = "Project Calgary", StartDate = DateTime.Parse("2018-01-20"), EndDate = DateTime.Parse("2018-01-30"),
+                new Project { Name = "Project Calgary",
+                    StartDate = Convert.ToDateTime("01/20/2018"),
+                    EndDate = Convert.ToDateTime("01/30/2018"), 
                               ClientId = clients.Single(c => c.Name == "Calgary Flames").ClientId },
-                new Project { Name = "Project Vancouver", StartDate = DateTime.Parse("2018-02-20"), EndDate = DateTime.Parse("2018-02-30"),
+                new Project { Name = "Project Vancouver",
+                     StartDate = Convert.ToDateTime("02/20/2018"),
+                    EndDate = Convert.ToDateTime("02/30/2018"),
                               ClientId = clients.Single(c => c.Name == "Vancouver Canucks").ClientId },
-                new Project { Name = "Project Winnnipeg", StartDate = DateTime.Parse("2018-03-20"), EndDate = DateTime.Parse("2018-03-30"),
+                new Project { Name = "Project Winnnipeg",
+                    StartDate = Convert.ToDateTime("03/20/2018"),
+                    EndDate = Convert.ToDateTime("03/30/2018"),
                               ClientId = clients.Single(c => c.Name == "Winnipeg Jets").ClientId }
             };
             foreach (Project p in projects)
@@ -81,9 +92,44 @@ namespace core_backend.Data
             {
                 return;
             }
-            var user = new UserDetail() { FirstName = "Bob", LastName = "Jones", Position = "Junior Developer" };
-            _context.UserDetail.Add(user);
-            _context.SaveChanges();
+
+                var user = new ApplicationUser { UserName = "admin@user.com", Email = "admin@user.com" };
+                var result = _userManager.CreateAsync(user, "Bcit123!");
+                if (result.IsCompletedSuccessfully)
+
+                {
+                    _userManager.AddToRoleAsync(user, StringDirectory.AdminUser);
+                    _context.UserDetail.Add(new UserDetail
+
+                    {
+                        UserId = user.Id,
+                        FirstName = "Karl",
+                        LastName = "Xu",
+                        Position = "Senior Developer"
+                    });
+
+                    _context.SaveChanges();
+
+                }
+                var userTwo = new ApplicationUser { UserName = "regular@user.com", Email = "regular@user.com" };
+                var resultTwo = _userManager.CreateAsync(userTwo, "Bcit123!"); if (resultTwo.IsCompletedSuccessfully)
+
+                {
+                    _userManager.AddToRoleAsync(userTwo, StringDirectory.CustomerUser);
+                    _context.UserDetail.Add(new UserDetail
+
+                    {
+                        UserId = userTwo.Id,
+                        FirstName = "Carolyn",
+                        LastName = "Ho",
+                        Position = "Consultant"
+                    });
+
+                    _context.SaveChanges();
+
+                }
+
+    
 
             if (_context.Timeslips.Any())
             {
@@ -91,9 +137,9 @@ namespace core_backend.Data
             }
             var timeslipOne = new Timeslip()
             {
-                StartTime = DateTime.ParseExact("2018-04-20 08:00", "yyyyMMdd HH:mm", CultureInfo.InvariantCulture),
-                EndTime = DateTime.ParseExact("2018-04-20 11:00", "yyyyMMdd HH:mm", CultureInfo.InvariantCulture),
-                UserId = user.UserId,
+                StartTime = DateTime.ParseExact("2018-04-20 08:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
+                EndTime = DateTime.ParseExact("2018-04-20 11:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
+                UserId = user.Id,
                 WorkBreakdownItemId = workBreakdownItems.Single(w => w.Description == "Calgary's Finance").WorkBreakdownItemId
             };
             _context.Timeslips.Add(timeslipOne);
