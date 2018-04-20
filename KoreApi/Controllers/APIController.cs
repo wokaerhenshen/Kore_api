@@ -108,10 +108,10 @@ namespace core_backend.Controllers
 
         [HttpPost]
         [Route("CreateWBI")]
-        public IActionResult CreateWBI(string name, string description, int estimatedHours, int actualHours, int projectId)
+        public IActionResult CreateWBI(string description, int estimatedHours, int actualHours, int projectId)
         {
             
-            return new OkObjectResult(wbiRepo.CreateWBI(name, description, estimatedHours, actualHours, projectId));
+            return new OkObjectResult(wbiRepo.CreateWBI(description, estimatedHours, actualHours, projectId));
         }
         [HttpGet]
         [Route("GetAllWBIs")]
@@ -129,9 +129,9 @@ namespace core_backend.Controllers
 
         [HttpPut]
         [Route("EditWBI")]
-        public IActionResult EditWBI(int id, string name, string description, int estimatedHours, int actualHours)
+        public IActionResult EditWBI(int id, string description, int estimatedHours, int actualHours)
         {
-            var wbi = wbiRepo.EditWBI(id, name, description, estimatedHours, actualHours);
+            var wbi = wbiRepo.EditWBI(id, description, estimatedHours, actualHours);
             if (wbi == null)
             {
                 return new NotFoundObjectResult(wbi);
@@ -152,10 +152,10 @@ namespace core_backend.Controllers
 
         [HttpPost]
         [Route("CreateTimeslip")]
-        public IActionResult CreateTimeslip(string StartTime, string EndTime, int workBreakDownId)
+        public IActionResult CreateTimeslip(string StartTime, string EndTime, string remarks, string tag, int workBreakDownId)
         {
 
-            return new ObjectResult(timeSlipRepo.CreateTimeslip(StartTime, EndTime, workBreakDownId));
+            return new ObjectResult(timeSlipRepo.CreateTimeslip(StartTime, EndTime, remarks, tag, workBreakDownId));
         }
 
         [HttpGet]
@@ -174,9 +174,9 @@ namespace core_backend.Controllers
 
         [HttpPut]
         [Route("EditTimeslip")]
-        public IActionResult EditTimeslip(int id, string StartTime, string EndTime)
+        public IActionResult EditTimeslip(int id, string StartTime, string EndTime, string remarks, string tag)
         {
-            var timeslip = timeSlipRepo.EditTimeslip(id, StartTime, EndTime);
+            var timeslip = timeSlipRepo.EditTimeslip(id, StartTime, EndTime, remarks, tag);
             if (timeslip == null)
             {
                 return new NotFoundObjectResult(timeslip);

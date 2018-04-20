@@ -17,13 +17,15 @@ namespace core_backend.Repositories
             _context = context;
         }
 
-        public Timeslip CreateTimeslip (string StartTime, string EndTime, int workBreakDownId)
+        public Timeslip CreateTimeslip (string StartTime, string EndTime, string remarks, string tag, int workBreakDownId)
         {
             // application user needs to be here
             Timeslip timeslip = new Timeslip()
             {
                 StartTime = DateTime.Parse(StartTime),
                 EndTime = DateTime.Parse(EndTime),
+                Remarks = remarks,
+                Tag = tag,
                 UserId = "1",
                 WorkBreakdownItemId = workBreakDownId
             };
@@ -43,7 +45,7 @@ namespace core_backend.Repositories
             return _context.Timeslips.Where(t => t.TimeslipId == id).FirstOrDefault();
         }
 
-        public Timeslip EditTimeslip(int id, string StartTime, string EndTime)
+        public Timeslip EditTimeslip(int id, string StartTime, string EndTime, string remarks, string tag)
         {
             var timeslip = GetOneTimeslip(id);
             if (timeslip == null)
@@ -54,7 +56,8 @@ namespace core_backend.Repositories
             {
                 timeslip.StartTime = DateTime.Parse(StartTime);
                 timeslip.EndTime = DateTime.Parse(EndTime);
-
+                timeslip.Remarks = remarks;
+                timeslip.Tag = tag;
                 _context.SaveChanges();
             }
             return timeslip;
